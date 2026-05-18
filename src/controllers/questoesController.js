@@ -39,6 +39,17 @@ async function buscarPorId(req, res) {
   }
 }
 
+async function listarPorVestibular(req, res) {
+  try {
+    const vestibulares = await QuestoesModel.listarPorVestibular();
+    res.status(200).json(vestibulares);
+  } catch (erro) {
+    res.status(500).json({ 
+      mensagem: 'Erro ao listar por vestibulares', 
+      erro: erro.message 
+    });
+  }
+}
 
 async function criar(req, res) {
   try {
@@ -152,6 +163,7 @@ async function deletar(req, res) {
 
 module.exports = {
   listarTodos,
+  listarPorVestibular,
   buscarPorId,
   criar,
   atualizar,

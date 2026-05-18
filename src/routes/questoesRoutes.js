@@ -7,6 +7,8 @@ router.get('/', QuestoesController.listarTodos);
 
 router.get('/:id', QuestoesController.buscarPorId);
 
+router.get('/vestibular/:vestibular', QuestoesController.listarPorVestibular);
+
 router.post('/', QuestoesController.criar);
 
 router.put('/:id', QuestoesController.atualizar);

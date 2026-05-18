@@ -17,6 +17,17 @@ async function buscarPorId(id) {
   return result.rows[0];
 }
 
+async function listarPorVestibular(vest) {
+  const sql = 'select * from select_vestibular where sigla ilike $1';
+  
+  const result = await pool.query(
+    sql,
+    [`%${vest}%`]
+  );
+  
+  return result.rows;
+}
+
 async function criar(dados) {
   const { idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url } = dados;
 
@@ -64,6 +75,7 @@ async function deletar(id) {
 module.exports = {
   listarTodos,
   buscarPorId,
+  listarPorVestibular,
   criar,
   atualizar,
   deletar
