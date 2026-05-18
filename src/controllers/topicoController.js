@@ -12,44 +12,6 @@ async function listarTodos(req, res) {
   }
 }
 
-async function listarPorView(req, res) {
-  try {
-    const topicos = await TopicoModel.listarPorView();
-    res.status(200).json(topicos);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao listar a view matemática', 
-      erro: erro.message 
-    });
-  }
-}
-
-async function listarPorDisciplina(req, res) {
-  try {
-    const { disciplina } = req.params;
-    const topicos = await TopicoModel.listarPorDisciplina(disciplina);
-    res.status(200).json(topicos);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar tópico por disciplina',
-      erro: erro.message 
-    });
-  }
-}
-
-async function topicoDisciplina(req, res) {
-  try {
-    const { topico, disciplina } = req.params;
-    const resultado = await TopicoModel.topicoDisciplina(topico, disciplina);
-    res.status(200).json(resultado);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar por tópico e disciplina',
-      erro: erro.message 
-    });
-  }
-}
-
 async function buscarPorId(req, res) {
   try {
     const id = parseInt(req.params.id);
@@ -77,47 +39,19 @@ async function buscarPorId(req, res) {
   }
 }
 
-async function buscarPorTopico(req, res) {
-  try {
-    const topico = parseInt(req.params.topico);
-    
-    if (isNaN(topico)) {
-      return res.status(400).json({ 
-        mensagem: 'ID inválido' 
-      });
-    }
-    
-    const topicos = await TopicoModel.buscarPorTopico(topico);
-    
-    if (topicos) {
-      res.status(200).json(topicos);
-    } else {
-      res.status(404).json({ 
-        mensagem: `Questão ${topico} não encontrada` 
-      });
-    }
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar',
-      erro: erro.message 
-    });
-  }
-}
-
 async function criar(req, res) {
   try {
-    const { disciplina, professor, descricao_topico } = req.body;
+    const { id_materia, nome_top } = req.body;
     
-    if (!disciplina || !professor || !descricao_topico) {
+    if (!id_materia || !nome_top) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
     const novoTopico = await TopicoModel.criar({ 
-      disciplina,
-      professor,
-      descricao_topico
+      id_materia,
+      nome_top
     });
     
     res.status(201).json(novoTopico);
@@ -132,7 +66,7 @@ async function criar(req, res) {
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { disciplina, professor, descricao_topico } = req.body;
+    const { id_materia, nome_top } = req.body;
     
     if (isNaN(id)) {
       return res.status(400).json({ 
@@ -140,16 +74,15 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!disciplina || !professor || !descricao_topico) {
+    if (!id_materia || !nome_top) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
     const topicoAtualizado = await TopicoModel.atualizar(id, { 
-      disciplina,
-      professor,
-      descricao_topico
+      id_materia,
+      nome_top
     });
     
     if (topicoAtualizado) {
@@ -198,11 +131,7 @@ async function deletar(req, res) {
 
 module.exports = {
   listarTodos,
-  listarPorView,
   buscarPorId,
-  buscarPorTopico,
-  listarPorDisciplina,
-  topicoDisciplina,
   criar,
   atualizar,
   deletar
