@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 async function listarTodos() {
   const result = await pool.query(
-    'SELECT * FROM questoes ORDER BY idc'
+    'SELECT * FROM vestibulares ORDER BY ID'
   );
   return result.rows;
 }
@@ -11,53 +11,42 @@ async function buscarPorId(id) {
   // PostgreSQL usa $1, $2, $3... como placeholders
   // (SQLite usava ? ? ?)
   const result = await pool.query(
-    'SELECT * FROM questoes WHERE idc = $1',
+    'SELECT * FROM vestibulares WHERE ID = $1',
     [id]
   );
   return result.rows[0];
 }
 
-async function buscarComLike(nome) {
-  const sql = 'SELECT enunciado, resposta FROM questoes WHERE enunciado ILIKE $1';
-  
-  const result = await pool.query(
-    sql,
-    [`%${nome}%`]
-  );
-  
-  return result.rows;
-}
-
 async function criar(dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { nome, sigla } = dados;
 
   const sql = `
-    INSERT INTO questoes (topicoid, enunciado, resposta, link_bib, dtinclusao)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO vestibulares (nome, sigla)
+    VALUES ($1, $2)
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [topicoid, enunciado, resposta, link_bib, dtinclusao]
+    [nome, sigla]
   );
   
   return result.rows[0];
 }
 
 async function atualizar(id, dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { nome, sigla } = dados;
   
   const sql = `
-    UPDATE questoes
-    SET topicoid = $1, enunciado = $2, resposta = $3, link_bib = $4, dtinclusao = $5
-    WHERE idc = $6
+    UPDATE vestibulares
+    SET nome = $1, sigla = $2
+    WHERE ID = $3
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [topicoid, enunciado, resposta, link_bib, dtinclusao, id]
+    [nome, sigla, ID]
   );
   
   return result.rows[0] || null;
@@ -65,7 +54,7 @@ async function atualizar(id, dados) {
 
 async function deletar(id) {
   const result = await pool.query(
-    'DELETE FROM questoes WHERE idc = $1',
+    'DELETE FROM vestibulares WHERE ID = $1',
     [id]
   );
 
@@ -75,7 +64,6 @@ async function deletar(id) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar
