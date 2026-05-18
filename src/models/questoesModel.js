@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 async function listarTodos() {
   const result = await pool.query(
-    'SELECT * FROM questoes ORDER BY idc'
+    'SELECT * FROM questoes ORDER BY idq'
   );
   return result.rows;
 }
@@ -11,53 +11,42 @@ async function buscarPorId(id) {
   // PostgreSQL usa $1, $2, $3... como placeholders
   // (SQLite usava ? ? ?)
   const result = await pool.query(
-    'SELECT * FROM questoes WHERE idc = $1',
+    'SELECT * FROM questoes WHERE idq = $1',
     [id]
   );
   return result.rows[0];
 }
 
-async function buscarComLike(nome) {
-  const sql = 'SELECT enunciado, resposta FROM questoes WHERE enunciado ILIKE $1';
-  
-  const result = await pool.query(
-    sql,
-    [`%${nome}%`]
-  );
-  
-  return result.rows;
-}
-
 async function criar(dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url } = dados;
 
   const sql = `
-    INSERT INTO questoes (topicoid, enunciado, resposta, link_bib, dtinclusao)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO questoes (idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [topicoid, enunciado, resposta, link_bib, dtinclusao]
+    [idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url]
   );
   
   return result.rows[0];
 }
 
 async function atualizar(id, dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url } = dados;
   
   const sql = `
     UPDATE questoes
-    SET topicoid = $1, enunciado = $2, resposta = $3, link_bib = $4, dtinclusao = $5
-    WHERE idc = $6
+    SET idvest = $1, idresp = $2, idtopico = $3, graudif = $4, ano = $5, enunciado = $6, alt_a = $7, alt_b = $8, alt_c = $9, alt_d = $10, alt_e = $11, imagem_url = $12
+    WHERE idq = $13
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [topicoid, enunciado, resposta, link_bib, dtinclusao, id]
+    [idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url, idq]
   );
   
   return result.rows[0] || null;
@@ -65,7 +54,7 @@ async function atualizar(id, dados) {
 
 async function deletar(id) {
   const result = await pool.query(
-    'DELETE FROM questoes WHERE idc = $1',
+    'DELETE FROM questoes WHERE idq = $1',
     [id]
   );
 
@@ -75,7 +64,6 @@ async function deletar(id) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar
