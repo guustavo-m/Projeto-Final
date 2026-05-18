@@ -1,12 +1,12 @@
-const QuestoesModel = require('../models/questoesModel');
+const DificuldadeModel = require('../models/dificuldadeModel');
 
 async function listarTodos(req, res) {
   try {
-    const questoes = await QuestoesModel.listarTodos();
-    res.status(200).json(questoes);
+    const dificuldades = await DificuldadeModel.listarTodos();
+    res.status(200).json(dificuldades);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao listar questões', 
+      mensagem: 'Erro ao listar dificuldade', 
       erro: erro.message 
     });
   }
@@ -22,67 +22,29 @@ async function buscarPorId(req, res) {
       });
     }
     
-    const questao = await QuestoesModel.buscarPorId(id);
+    const dificuldade = await DificuldadeModel.buscarPorId(id);
     
-    if (questao) {
-      res.status(200).json(questao);
+    if (dificuldade) {
+      res.status(200).json(dificuldade);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Dificuldade ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao buscar questão',
+      mensagem: 'Erro ao buscar dificuldade',
       erro: erro.message 
     });
   }
 }
 
-async function buscarComLike(req, res) {
-  try {
-    const { enunciado } = req.params;
-    const questoes = await QuestoesModel.buscarComLike(enunciado);
-    res.status(200).json(questoes);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar questões com like',
-      erro: erro.message 
-    });
-  }
-}
 
-async function criar(req, res) {
-  try {
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
-    
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
-      return res.status(400).json({ 
-        mensagem: 'Todos os campos são obrigatórios' 
-      });
-    }
-    
-    const novaQuestao = await QuestoesModel.criar({ 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
-    });
-    
-    res.status(201).json(novaQuestao);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao criar questão',
-      erro: erro.message 
-    });
-  }
-}
 
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { grau } = req.body;
     
     if (isNaN(id)) {
       return res.status(400).json({ 
@@ -90,30 +52,26 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!grau) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const questaoAtualizado = await QuestoesModel.atualizar(id, { 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const grauAtualizado = await DificuldadeModel.atualizar(id, { 
+      grau
     });
     
-    if (questaoAtualizado) {
-      res.status(200).json(questaoAtualizado);
+    if (grauAtualizado) {
+      res.status(200).json(grauAtualizado);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Dificuldade ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao atualizar questão',
+      mensagem: 'Erro ao atualizar dificuldade',
       erro: erro.message 
     });
   }
@@ -129,20 +87,20 @@ async function deletar(req, res) {
       });
     }
     
-    const deletado = await QuestoesModel.deletar(id);
+    const deletado = await DificuldadeModel.deletar(id);
     
     if (deletado) {
       res.status(200).json({ 
-        mensagem: `Questão ${id} removida com sucesso` 
+        mensagem: `Dificuldade ${id} removida com sucesso` 
       });
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Dificuldade ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao deletar questão',
+      mensagem: 'Erro ao deletar dificuldade',
       erro: erro.message 
     });
   }
@@ -151,8 +109,6 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
-  criar,
   atualizar,
   deletar
 };
