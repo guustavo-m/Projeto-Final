@@ -39,35 +39,30 @@ async function buscarPorId(req, res) {
   }
 }
 
-async function buscarComLike(req, res) {
-  try {
-    const { enunciado } = req.params;
-    const questoes = await QuestoesModel.buscarComLike(enunciado);
-    res.status(200).json(questoes);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar questões com like',
-      erro: erro.message 
-    });
-  }
-}
 
 async function criar(req, res) {
   try {
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url } = req.body;
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!idvest || !idresp || !idtopico || !graudif || !ano || !enunciado || !alt_a || !alt_b || !alt_c || !alt_d || !alt_e ||!imagem_url) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
     const novaQuestao = await QuestoesModel.criar({ 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+      idvest,
+      idresp,
+      idtopico, 
+      graudif, 
+      ano, 
+      enunciado, 
+      alt_a, 
+      alt_b, 
+      alt_c, 
+      alt_d, 
+      alt_e, 
+      imagem_url
     });
     
     res.status(201).json(novaQuestao);
@@ -82,7 +77,7 @@ async function criar(req, res) {
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url } = req.body;
     
     if (isNaN(id)) {
       return res.status(400).json({ 
@@ -90,18 +85,25 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!idvest || !idresp || !idtopico || !graudif || !ano || !enunciado || !alt_a || !alt_b || !alt_c || !alt_d || !alt_e ||!imagem_url) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
     const questaoAtualizado = await QuestoesModel.atualizar(id, { 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+      idvest,
+      idresp,
+      idtopico, 
+      graudif, 
+      ano, 
+      enunciado, 
+      alt_a, 
+      alt_b, 
+      alt_c, 
+      alt_d, 
+      alt_e, 
+      imagem_url
     });
     
     if (questaoAtualizado) {
@@ -151,7 +153,6 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar

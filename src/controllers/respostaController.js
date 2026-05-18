@@ -1,12 +1,12 @@
-const QuestoesModel = require('../models/questoesModel');
+const RespostasModel = require('../models/questoesModel');
 
 async function listarTodos(req, res) {
   try {
-    const questoes = await QuestoesModel.listarTodos();
-    res.status(200).json(questoes);
+    const respostas = await RespostasModel.listarTodos();
+    res.status(200).json(respostas);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao listar questões', 
+      mensagem: 'Erro ao listar respostas', 
       erro: erro.message 
     });
   }
@@ -22,31 +22,18 @@ async function buscarPorId(req, res) {
       });
     }
     
-    const questao = await QuestoesModel.buscarPorId(id);
+    const resposta = await RespostasModel.buscarPorId(id);
     
-    if (questao) {
-      res.status(200).json(questao);
+    if (resposta) {
+      res.status(200).json(resposta);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Resposta ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao buscar questão',
-      erro: erro.message 
-    });
-  }
-}
-
-async function buscarComLike(req, res) {
-  try {
-    const { enunciado } = req.params;
-    const questoes = await QuestoesModel.buscarComLike(enunciado);
-    res.status(200).json(questoes);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar questões com like',
+      mensagem: 'Erro ao buscar resposta',
       erro: erro.message 
     });
   }
@@ -54,26 +41,26 @@ async function buscarComLike(req, res) {
 
 async function criar(req, res) {
   try {
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { id_resp, resp_correta, explicacao_prof, contas_url,videoaula} = req.body;
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (! id_resp || !resp_correta || !explicacao_prof || !contas_url || !videoaula) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const novaQuestao = await QuestoesModel.criar({ 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const novaresposta = await QuestoesModel.criar({ 
+    id_resp, 
+    resp_correta,
+    explicacao_prof, 
+    contas_url,
+    videoaula
     });
     
-    res.status(201).json(novaQuestao);
+    res.status(201).json(novaresposta);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao criar questão',
+      mensagem: 'Erro ao criar resposta',
       erro: erro.message 
     });
   }
@@ -82,7 +69,7 @@ async function criar(req, res) {
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { id_resp, resp_correta, explicacao_prof, contas_url,videoaula} = req.body;
     
     if (isNaN(id)) {
       return res.status(400).json({ 
@@ -90,30 +77,30 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (! id_resp || !resp_correta || !explicacao_prof || !contas_url || !videoaula) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const questaoAtualizado = await QuestoesModel.atualizar(id, { 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const respostaAtualizado = await QuestoesModel.atualizar(id, { 
+      id_resp, 
+      resp_correta,
+      explicacao_prof, 
+      contas_url,
+      videoaula
     });
     
-    if (questaoAtualizado) {
-      res.status(200).json(questaoAtualizado);
+    if (respostaAtualizado) {
+      res.status(200).json(respostaAtualizado);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Resposta ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao atualizar questão',
+      mensagem: 'Erro ao atualizar resposta',
       erro: erro.message 
     });
   }
@@ -133,16 +120,16 @@ async function deletar(req, res) {
     
     if (deletado) {
       res.status(200).json({ 
-        mensagem: `Questão ${id} removida com sucesso` 
+        mensagem: `Resposta ${id} removida com sucesso` 
       });
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Resposta ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao deletar questão',
+      mensagem: 'Erro ao deletar resposta',
       erro: erro.message 
     });
   }
@@ -151,7 +138,6 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar
