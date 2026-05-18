@@ -13,9 +13,24 @@ app.use('/topico', topicoRoutes);
 const questoesRoutes = require('./src/routes/questoesRoutes');
 app.use('/questoes', questoesRoutes);
 
+const dificuldadeRoutes = require('./src/routes/dificuldadeRoutes');
+app.use('/dificuldade', dificuldadeRoutes);
+
+const materiaRoutes = require('./src/routes/materiaRoutes');
+app.use('/materia', materiaRoutes);
+
+const respostaRoutes = require('./src/routes/respostaRoutes');
+app.use('/resposta', respostaRoutes);
+
+const usuarioRoutes = require('./src/routes/usuarioRoutes');
+app.use('/usuario', usuarioRoutes);
+
+const vestibularesRoutes = require('./src/routes/vestibularesRoutes');
+app.use('/vestibulares', vestibularesRoutes);
+
 app.get('/', (req, res) => {
   res.json({ 
-    mensagem: 'API de Matemática com PostgreSQL',
+    mensagem: 'API do Projeto Final SESI SENAI com PostgreSQL',
     versao: '3.0',
     ambiente: process.env.NODE_ENV || 'development',
     banco: 'PostgreSQL'
