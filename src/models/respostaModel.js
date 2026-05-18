@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 async function listarTodos() {
   const result = await pool.query(
-    'SELECT * FROM questoes ORDER BY idc'
+    'SELECT * FROM resposta ORDER BY id_resp'
   );
   return result.rows;
 }
@@ -11,53 +11,42 @@ async function buscarPorId(id) {
   // PostgreSQL usa $1, $2, $3... como placeholders
   // (SQLite usava ? ? ?)
   const result = await pool.query(
-    'SELECT * FROM questoes WHERE idc = $1',
+    'SELECT * FROM resposta WHERE id_resp = $1',
     [id]
   );
   return result.rows[0];
 }
 
-async function buscarComLike(nome) {
-  const sql = 'SELECT enunciado, resposta FROM questoes WHERE enunciado ILIKE $1';
-  
-  const result = await pool.query(
-    sql,
-    [`%${nome}%`]
-  );
-  
-  return result.rows;
-}
-
 async function criar(dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { resp_correta, explicacao_prof, contas_url, videoaula } = dados;
 
   const sql = `
-    INSERT INTO questoes (topicoid, enunciado, resposta, link_bib, dtinclusao)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO questoes (resp_correta, explicacao_prof, contas_url, videoaula)
+    VALUES ($1, $2, $3, $4)
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [topicoid, enunciado, resposta, link_bib, dtinclusao]
+    [resp_correta, explicacao_prof, contas_url, videoaula]
   );
   
   return result.rows[0];
 }
 
 async function atualizar(id, dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { resp_correta, explicacao_prof, contas_url, videoaula } = dados;
   
   const sql = `
     UPDATE questoes
-    SET topicoid = $1, enunciado = $2, resposta = $3, link_bib = $4, dtinclusao = $5
-    WHERE idc = $6
+    SET resp_correta = $1, explicacao_prof = $2, contas_url = $3, videoaula = $4
+    WHERE id_resp = $5
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [topicoid, enunciado, resposta, link_bib, dtinclusao, id]
+    [resp_correta, explicacao_prof, contas_url, videoaula, id_resp]
   );
   
   return result.rows[0] || null;
@@ -65,7 +54,7 @@ async function atualizar(id, dados) {
 
 async function deletar(id) {
   const result = await pool.query(
-    'DELETE FROM questoes WHERE idc = $1',
+    'DELETE FROM questoes WHERE id_resp = $1',
     [id]
   );
 
@@ -75,7 +64,6 @@ async function deletar(id) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar

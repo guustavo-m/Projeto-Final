@@ -7,8 +7,6 @@ router.get('/', QuestoesController.listarTodos);
 
 router.get('/:id', QuestoesController.buscarPorId);
 
-router.get('/enunciado/:enunciado', QuestoesController.buscarComLike);
-
 router.post('/', QuestoesController.criar);
 
 router.put('/:id', QuestoesController.atualizar);

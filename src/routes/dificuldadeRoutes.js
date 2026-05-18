@@ -1,18 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const QuestoesController = require('../controllers/questoesController');
+const DificuldadeController = require('../controllers/dificuldadeController');
 
-router.get('/', QuestoesController.listarTodos);
+router.get('/', DificuldadeController.listarTodos);
 
-router.get('/:id', QuestoesController.buscarPorId);
+router.get('/:id', DificuldadeController.buscarPorId);
 
-router.get('/enunciado/:enunciado', QuestoesController.buscarComLike);
+router.post('/', DificuldadeController.criar);
 
-router.post('/', QuestoesController.criar);
+router.put('/:id', DificuldadeController.atualizar);
 
-router.put('/:id', QuestoesController.atualizar);
-
-router.delete('/:id', QuestoesController.deletar);
+router.delete('/:id', DificuldadeController.deletar);
 
 module.exports = router;

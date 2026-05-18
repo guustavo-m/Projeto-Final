@@ -1,18 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const QuestoesController = require('../controllers/questoesController');
+const VestibularesController = require('../controllers/vestibularesController');
 
-router.get('/', QuestoesController.listarTodos);
+router.get('/', VestibularesController.listarTodos);
 
-router.get('/:id', QuestoesController.buscarPorId);
+router.get('/:id', VestibularesController.buscarPorId);
 
-router.get('/enunciado/:enunciado', QuestoesController.buscarComLike);
+router.post('/', VestibularesController.criar);
 
-router.post('/', QuestoesController.criar);
+router.put('/:id', VestibularesController.atualizar);
 
-router.put('/:id', QuestoesController.atualizar);
-
-router.delete('/:id', QuestoesController.deletar);
+router.delete('/:id', VestibularesController.deletar);
 
 module.exports = router;
