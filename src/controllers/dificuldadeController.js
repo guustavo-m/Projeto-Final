@@ -39,7 +39,28 @@ async function buscarPorId(req, res) {
   }
 }
 
-
+async function criar(req, res) {
+  try {
+    const { grau } = req.body;
+    
+    if (!grau) {
+      return res.status(400).json({ 
+        mensagem: 'Todos os campos são obrigatórios' 
+      });
+    }
+    
+    const novaDificuldade = await DificuldadeModel.criar({ 
+      grau
+    });
+    
+    res.status(201).json(novaDificuldade);
+  } catch (erro) {
+    res.status(500).json({ 
+      mensagem: 'Erro ao criar dificuldade',
+      erro: erro.message 
+    });
+  }
+}
 
 async function atualizar(req, res) {
   try {
@@ -108,6 +129,7 @@ async function deletar(req, res) {
 
 module.exports = {
   listarTodos,
+  criar,
   buscarPorId,
   atualizar,
   deletar

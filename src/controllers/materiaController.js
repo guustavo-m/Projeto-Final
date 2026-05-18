@@ -1,4 +1,4 @@
-const MateriasModel = require('../models/materiasModel');
+const MateriasModel = require('../models/materiaModel');
 
 async function listarTodos(req, res) {
   try {
