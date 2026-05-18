@@ -1,12 +1,12 @@
-const QuestoesModel = require('../models/questoesModel');
+const UsuarioModel = require('../models/UsuarioModel');
 
 async function listarTodos(req, res) {
   try {
-    const questoes = await QuestoesModel.listarTodos();
-    res.status(200).json(questoes);
+    const usuarios = await UsuarioModel.listarTodos();
+    res.status(200).json(usuarios);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao listar questões', 
+      mensagem: 'Erro ao listar usuários', 
       erro: erro.message 
     });
   }
@@ -22,31 +22,18 @@ async function buscarPorId(req, res) {
       });
     }
     
-    const questao = await QuestoesModel.buscarPorId(id);
+    const usuario = await UsuarioModel.buscarPorId(id);
     
-    if (questao) {
-      res.status(200).json(questao);
+    if (usuario) {
+      res.status(200).json(usuario);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Usuário ${id} não encontrado` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao buscar questão',
-      erro: erro.message 
-    });
-  }
-}
-
-async function buscarComLike(req, res) {
-  try {
-    const { enunciado } = req.params;
-    const questoes = await QuestoesModel.buscarComLike(enunciado);
-    res.status(200).json(questoes);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar questões com like',
+      mensagem: 'Erro ao buscar usuário',
       erro: erro.message 
     });
   }
@@ -54,26 +41,24 @@ async function buscarComLike(req, res) {
 
 async function criar(req, res) {
   try {
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { nome, email, senha } = req.body;
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!nome || !email || !senha) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const novaQuestao = await QuestoesModel.criar({ 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const novausuario = await UsuarioModel.criar({ 
+      nome,
+      email,
+      senha
     });
     
-    res.status(201).json(novaQuestao);
+    res.status(201).json(novausuario);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao criar questão',
+      mensagem: 'Erro ao criar usuário',
       erro: erro.message 
     });
   }
@@ -82,7 +67,7 @@ async function criar(req, res) {
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { nome, email, senha } = req.body;
     
     if (isNaN(id)) {
       return res.status(400).json({ 
@@ -90,30 +75,28 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!nome || !email || !senha) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const questaoAtualizado = await QuestoesModel.atualizar(id, { 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const usuarioAtualizado = await UsuarioModel.atualizar(id, { 
+      nome,
+      email,
+      senha
     });
     
-    if (questaoAtualizado) {
-      res.status(200).json(questaoAtualizado);
+    if (usuarioAtualizado) {
+      res.status(200).json(usuarioAtualizado);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Usuário ${id} não encontrado` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao atualizar questão',
+      mensagem: 'Erro ao atualizar usuário',
       erro: erro.message 
     });
   }
@@ -129,20 +112,20 @@ async function deletar(req, res) {
       });
     }
     
-    const deletado = await QuestoesModel.deletar(id);
+    const deletado = await UsuarioModel.deletar(id);
     
     if (deletado) {
       res.status(200).json({ 
-        mensagem: `Questão ${id} removida com sucesso` 
+        mensagem: `Usuário ${id} removido com sucesso` 
       });
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Usuário ${id} não encontrado` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao deletar questão',
+      mensagem: 'Erro ao deletar usuário',
       erro: erro.message 
     });
   }
@@ -151,7 +134,6 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar
