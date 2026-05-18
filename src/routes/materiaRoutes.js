@@ -1,18 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const QuestoesController = require('../controllers/questoesController');
+const MateriaController = require('../controllers/materiaController');
 
-router.get('/', QuestoesController.listarTodos);
+router.get('/', MateriaController.listarTodos);
 
-router.get('/:id', QuestoesController.buscarPorId);
+router.get('/:id', MateriaController.buscarPorId);
 
-router.get('/enunciado/:enunciado', QuestoesController.buscarComLike);
+router.post('/', MateriaController.criar);
 
-router.post('/', QuestoesController.criar);
+router.put('/:id', MateriaController.atualizar);
 
-router.put('/:id', QuestoesController.atualizar);
-
-router.delete('/:id', QuestoesController.deletar);
+router.delete('/:id', MateriaController.deletar);
 
 module.exports = router;
