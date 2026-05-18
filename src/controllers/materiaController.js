@@ -1,12 +1,12 @@
-const QuestoesModel = require('../models/questoesModel');
+const MateriasModel = require('../models/materiasModel');
 
 async function listarTodos(req, res) {
   try {
-    const questoes = await QuestoesModel.listarTodos();
-    res.status(200).json(questoes);
+    const materias = await MateriasModel.listarTodos();
+    res.status(200).json(materias);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao listar questões', 
+      mensagem: 'Erro ao listar materias', 
       erro: erro.message 
     });
   }
@@ -22,31 +22,18 @@ async function buscarPorId(req, res) {
       });
     }
     
-    const questao = await QuestoesModel.buscarPorId(id);
+    const materia = await materiasModel.buscarPorId(id);
     
-    if (questao) {
-      res.status(200).json(questao);
+    if (materia) {
+      res.status(200).json(materia);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Materia ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao buscar questão',
-      erro: erro.message 
-    });
-  }
-}
-
-async function buscarComLike(req, res) {
-  try {
-    const { enunciado } = req.params;
-    const questoes = await QuestoesModel.buscarComLike(enunciado);
-    res.status(200).json(questoes);
-  } catch (erro) {
-    res.status(500).json({ 
-      mensagem: 'Erro ao buscar questões com like',
+      mensagem: 'Erro ao buscar materia',
       erro: erro.message 
     });
   }
@@ -54,26 +41,22 @@ async function buscarComLike(req, res) {
 
 async function criar(req, res) {
   try {
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { nome_mat } = req.body;
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!nome_mat) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const novaQuestao = await QuestoesModel.criar({ 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const novaMateria = await materiasModel.criar({ 
+      nome_mat
     });
     
-    res.status(201).json(novaQuestao);
+    res.status(201).json(novaMateria);
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao criar questão',
+      mensagem: 'Erro ao criar materia',
       erro: erro.message 
     });
   }
@@ -82,7 +65,7 @@ async function criar(req, res) {
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { topicoid, enunciado, resposta, link_bib, dtinclusao } = req.body;
+    const { nome_mat} = req.body;
     
     if (isNaN(id)) {
       return res.status(400).json({ 
@@ -90,30 +73,26 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!topicoid || !enunciado || !resposta || !link_bib || !dtinclusao) {
+    if (!nome_mat) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const questaoAtualizado = await QuestoesModel.atualizar(id, { 
-      topicoid,
-      enunciado,
-      resposta,
-      link_bib,
-      dtinclusao
+    const materiaAtualizado = await materiasModel.atualizar(id, { 
+      nome_mat
     });
     
-    if (questaoAtualizado) {
-      res.status(200).json(questaoAtualizado);
+    if (materiaAtualizado) {
+      res.status(200).json(materiaAtualizado);
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Materia ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao atualizar questão',
+      mensagem: 'Erro ao atualizar materia',
       erro: erro.message 
     });
   }
@@ -129,20 +108,20 @@ async function deletar(req, res) {
       });
     }
     
-    const deletado = await QuestoesModel.deletar(id);
+    const deletado = await materiasModel.deletar(id);
     
     if (deletado) {
       res.status(200).json({ 
-        mensagem: `Questão ${id} removida com sucesso` 
+        mensagem: `Materia ${id} removida com sucesso` 
       });
     } else {
       res.status(404).json({ 
-        mensagem: `Questão ${id} não encontrada` 
+        mensagem: `Materia ${id} não encontrada` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
-      mensagem: 'Erro ao deletar questão',
+      mensagem: 'Erro ao deletar materia',
       erro: erro.message 
     });
   }
@@ -151,7 +130,6 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   buscarPorId,
-  buscarComLike,
   criar,
   atualizar,
   deletar
