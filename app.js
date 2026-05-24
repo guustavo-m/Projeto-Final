@@ -2,10 +2,16 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
+const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static('./src/public/pages/home'));
 app.use(express.json());
+
+const authRoutes = require('./src/routes/authRoutes');
+const { verificarToken } = require('./src/middleware/authMiddleware');
+app.use('/auth', authRoutes);
 
 const topicoRoutes = require('./src/routes/topicoRoutes');
 app.use('/topico', topicoRoutes);
@@ -27,6 +33,10 @@ app.use('/usuario', usuarioRoutes);
 
 const vestibularesRoutes = require('./src/routes/vestibularesRoutes');
 app.use('/vestibulares', vestibularesRoutes);
+
+app.get('/cadastro', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src', 'public', 'pages','cadastro.html'));
+});
 
 app.get('/', (req, res) => {
   res.json({ 

@@ -1,0 +1,28 @@
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    padding:40px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    margin-top:30px;
+}
+
+.card{
+    background:#1e293b;
+    padding:25px;
+    border-radius:10px;
+}
+
+.card ul{
+    margin-top:15px;
+    padding-left:20px;
+}
+
+.card li{
+    margin-bottom:10px;
+}
