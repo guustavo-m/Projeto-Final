@@ -41,21 +41,50 @@ async function buscarPorId(req, res) {
 
 async function listarPorVestibular(req, res) {
   try {
-    const vestibulares = await QuestoesModel.listarPorVestibular();
+    const { vestibular } = req.params;
+    const vestibulares = await QuestoesModel.listarPorVestibular(vestibular);
     res.status(200).json(vestibulares);
   } catch (erro) {
     res.status(500).json({ 
       mensagem: 'Erro ao listar por vestibulares', 
       erro: erro.message 
     });
+
   }
 }
+
+async function listarPorMateria(req, res) {
+  try {
+    const { materia } = req.params;
+    const materias = await QuestoesModel.listarPorMateria(materia);
+    res.status(200).json(materias);
+  } catch (erro) {
+    res.status(500).json({ 
+      mensagem: 'Erro ao listar por materias', 
+      erro: erro.message 
+    });
+  }
+}
+
+async function listarPorTopico(req, res) {
+  try {
+    const { topico } = req.params;
+    const topicos = await QuestoesModel.listarPorTopico(topico);
+    res.status(200).json(topicos);
+  } catch (erro) {
+    res.status(500).json({ 
+      mensagem: 'Erro ao listar por topicos', 
+      erro: erro.message 
+    });
+  }
+}
+
 
 async function criar(req, res) {
   try {
     const { idvest, idresp, idtopico, graudif, ano, enunciado, alt_a, alt_b, alt_c, alt_d, alt_e, imagem_url } = req.body;
     
-    if (!idvest || !idresp || !idtopico || !graudif || !ano || !enunciado || !alt_a || !alt_b || !alt_c || !alt_d || !alt_e ||!imagem_url) {
+    if (!idvest || !idresp || !idtopico || !graudif || !ano || !enunciado || !alt_a || !alt_b || !alt_c || !alt_d) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
@@ -96,7 +125,7 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!idvest || !idresp || !idtopico || !graudif || !ano || !enunciado || !alt_a || !alt_b || !alt_c || !alt_d || !alt_e ||!imagem_url) {
+    if (!idvest || !idresp || !idtopico || !graudif || !ano || !enunciado || !alt_a || !alt_b || !alt_c || !alt_d) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
@@ -164,6 +193,8 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   listarPorVestibular,
+  listarPorMateria,
+  listarPorTopico,
   buscarPorId,
   criar,
   atualizar,

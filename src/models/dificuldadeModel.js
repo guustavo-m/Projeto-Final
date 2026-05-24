@@ -18,7 +18,7 @@ async function buscarPorId(id) {
 }
 
 async function criar(dados) {
-  const { topicoid, enunciado, resposta, link_bib, dtinclusao } = dados;
+  const { grau } = dados;
 
   const sql = `
     INSERT INTO dificuldade (grau)
@@ -46,7 +46,7 @@ async function atualizar(id, dados) {
   
   const result = await pool.query(
     sql,
-    [grau, id_d]
+    [grau, id]
   );
   
   return result.rows[0] || null;

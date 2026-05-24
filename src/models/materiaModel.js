@@ -46,7 +46,7 @@ async function atualizar(id, dados) {
   
   const result = await pool.query(
     sql,
-    [nome_mat, id_mat]
+    [nome_mat, id]
   );
   
   return result.rows[0] || null;

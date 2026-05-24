@@ -1,4 +1,4 @@
-const RespostasModel = require('../models/questoesModel');
+const RespostasModel = require('../models/respostaModel');
 
 async function listarTodos(req, res) {
   try {
@@ -41,16 +41,15 @@ async function buscarPorId(req, res) {
 
 async function criar(req, res) {
   try {
-    const { id_resp, resp_correta, explicacao_prof, contas_url,videoaula} = req.body;
+    const {resp_correta, explicacao_prof, contas_url, videoaula} = req.body;
     
-    if (! id_resp || !resp_correta || !explicacao_prof || !contas_url || !videoaula) {
+    if (!resp_correta || !explicacao_prof) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const novaresposta = await QuestoesModel.criar({ 
-    id_resp, 
+    const novaresposta = await RespostasModel.criar({ 
     resp_correta,
     explicacao_prof, 
     contas_url,
@@ -77,13 +76,13 @@ async function atualizar(req, res) {
       });
     }
     
-    if (! id_resp || !resp_correta || !explicacao_prof || !contas_url || !videoaula) {
+    if (! id_resp || !resp_correta || !explicacao_prof) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
     }
     
-    const respostaAtualizado = await QuestoesModel.atualizar(id, { 
+    const respostaAtualizado = await RespostasModel.atualizar(id, { 
       id_resp, 
       resp_correta,
       explicacao_prof, 
@@ -116,7 +115,7 @@ async function deletar(req, res) {
       });
     }
     
-    const deletado = await QuestoesModel.deletar(id);
+    const deletado = await RespostasModel.deletar(id);
     
     if (deletado) {
       res.status(200).json({ 

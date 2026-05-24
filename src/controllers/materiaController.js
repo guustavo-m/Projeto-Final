@@ -22,7 +22,7 @@ async function buscarPorId(req, res) {
       });
     }
     
-    const materia = await materiasModel.buscarPorId(id);
+    const materia = await MateriasModel.buscarPorId(id);
     
     if (materia) {
       res.status(200).json(materia);
@@ -49,7 +49,7 @@ async function criar(req, res) {
       });
     }
     
-    const novaMateria = await materiasModel.criar({ 
+    const novaMateria = await MateriasModel.criar({ 
       nome_mat
     });
     
@@ -79,7 +79,7 @@ async function atualizar(req, res) {
       });
     }
     
-    const materiaAtualizado = await materiasModel.atualizar(id, { 
+    const materiaAtualizado = await MateriasModel.atualizar(id, { 
       nome_mat
     });
     
@@ -108,7 +108,7 @@ async function deletar(req, res) {
       });
     }
     
-    const deletado = await materiasModel.deletar(id);
+    const deletado = await MateriasModel.deletar(id);
     
     if (deletado) {
       res.status(200).json({ 

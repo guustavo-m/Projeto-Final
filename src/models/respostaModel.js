@@ -21,7 +21,7 @@ async function criar(dados) {
   const { resp_correta, explicacao_prof, contas_url, videoaula } = dados;
 
   const sql = `
-    INSERT INTO questoes (resp_correta, explicacao_prof, contas_url, videoaula)
+    INSERT INTO resposta (resp_correta, explicacao_prof, contas_url, videoaula)
     VALUES ($1, $2, $3, $4)
     RETURNING *
   `;
@@ -38,7 +38,7 @@ async function atualizar(id, dados) {
   const { resp_correta, explicacao_prof, contas_url, videoaula } = dados;
   
   const sql = `
-    UPDATE questoes
+    UPDATE resposta
     SET resp_correta = $1, explicacao_prof = $2, contas_url = $3, videoaula = $4
     WHERE id_resp = $5
     RETURNING *
@@ -46,7 +46,7 @@ async function atualizar(id, dados) {
   
   const result = await pool.query(
     sql,
-    [resp_correta, explicacao_prof, contas_url, videoaula, id_resp]
+    [resp_correta, explicacao_prof, contas_url, videoaula, id]
   );
   
   return result.rows[0] || null;
@@ -54,7 +54,7 @@ async function atualizar(id, dados) {
 
 async function deletar(id) {
   const result = await pool.query(
-    'DELETE FROM questoes WHERE id_resp = $1',
+    'DELETE FROM resposta WHERE id_resp = $1',
     [id]
   );
 

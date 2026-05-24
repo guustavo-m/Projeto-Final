@@ -11,7 +11,7 @@ async function buscarPorId(id) {
   // PostgreSQL usa $1, $2, $3... como placeholders
   // (SQLite usava ? ? ?)
   const result = await pool.query(
-    'SELECT * FROM topicos WHERE id_top = $1',
+    'SELECT * FROM topico WHERE id_top = $1',
     [id]
   );
   return result.rows[0];
@@ -21,7 +21,7 @@ async function criar(dados) {
   const { id_materia, nome_top } = dados;
 
   const sql = `
-    INSERT INTO topicos (id_materia, nome_top)
+    INSERT INTO topico (id_materia, nome_top)
     VALUES ($1, $2)
     RETURNING *
   `;
@@ -38,7 +38,7 @@ async function atualizar(id, dados) {
   const { id_materia, nome_top } = dados;
   
   const sql = `
-    UPDATE topicos
+    UPDATE topico
     SET id_materia = $1, nome_top = $2
     WHERE id_top = $3
     RETURNING *
@@ -46,7 +46,7 @@ async function atualizar(id, dados) {
   
   const result = await pool.query(
     sql,
-    [id_materia, nome_top, id_top]
+    [id_materia, nome_top, id]
   );
   
   return result.rows[0] || null;
@@ -54,7 +54,7 @@ async function atualizar(id, dados) {
 
 async function deletar(id) {
   const result = await pool.query(
-    'DELETE FROM topicos WHERE id_top = $1',
+    'DELETE FROM topico WHERE id_top = $1',
     [id]
   );
 

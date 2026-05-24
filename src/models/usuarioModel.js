@@ -46,7 +46,7 @@ async function atualizar(id, dados) {
   
   const result = await pool.query(
     sql,
-    [nome, email, senha, id_user]
+    [nome, email, senha, id]
   );
   
   return result.rows[0] || null;
