@@ -3,14 +3,18 @@ const router = express.Router();
 
 const MateriaController = require('../controllers/materiaController');
 
-router.get('/', MateriaController.listarTodos);
+const { verificarToken } = require('../middleware/authMiddleware');
 
-router.get('/:id', MateriaController.buscarPorId);
+const { verificarAdmin } = require('../middleware/adminMiddleware');
 
-router.post('/', MateriaController.criar);
+router.get('/', verificarToken, MateriaController.listarTodos);
 
-router.put('/:id', MateriaController.atualizar);
+router.get('/:id', verificarToken, MateriaController.buscarPorId);
 
-router.delete('/:id', MateriaController.deletar);
+router.post('/', verificarToken, verificarAdmin, MateriaController.criar);
+
+router.put('/:id', verificarToken, verificarAdmin, MateriaController.atualizar);
+
+router.delete('/:id', verificarToken, verificarAdmin, MateriaController.deletar);
 
 module.exports = router;

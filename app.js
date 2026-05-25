@@ -6,7 +6,7 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static('./src/public/pages/home'));
+app.use(express.static('./src/public/pages/login.html'));
 app.use(express.json());
 
 const authRoutes = require('./src/routes/authRoutes');
@@ -14,28 +14,28 @@ const { verificarToken } = require('./src/middleware/authMiddleware');
 app.use('/auth', authRoutes);
 
 const topicoRoutes = require('./src/routes/topicoRoutes');
-app.use('/topico', topicoRoutes);
+app.use('/topico', verificarToken, topicoRoutes);
 
 const questoesRoutes = require('./src/routes/questoesRoutes');
-app.use('/questoes', questoesRoutes);
+app.use('/questoes', verificarToken, questoesRoutes);
 
 const dificuldadeRoutes = require('./src/routes/dificuldadeRoutes');
-app.use('/dificuldade', dificuldadeRoutes);
+app.use('/dificuldade', verificarToken, dificuldadeRoutes);
 
 const materiaRoutes = require('./src/routes/materiaRoutes');
-app.use('/materia', materiaRoutes);
+app.use('/materia', verificarToken, materiaRoutes);
 
 const respostaRoutes = require('./src/routes/respostaRoutes');
-app.use('/resposta', respostaRoutes);
+app.use('/resposta', verificarToken, respostaRoutes);
 
 const usuarioRoutes = require('./src/routes/usuarioRoutes');
-app.use('/usuario', usuarioRoutes);
+app.use('/usuario', verificarToken, usuarioRoutes);
 
 const vestibularesRoutes = require('./src/routes/vestibularesRoutes');
-app.use('/vestibulares', vestibularesRoutes);
+app.use('/vestibulares', verificarToken, vestibularesRoutes);
 
-app.get('/cadastro', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src', 'public', 'pages','cadastro.html'));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src', 'public', 'pages', 'cadastro.html'));
 });
 
 app.get('/', (req, res) => {

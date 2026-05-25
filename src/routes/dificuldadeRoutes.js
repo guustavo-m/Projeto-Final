@@ -3,14 +3,18 @@ const router = express.Router();
 
 const DificuldadeController = require('../controllers/dificuldadeController');
 
-router.get('/', DificuldadeController.listarTodos);
+const { verificarToken } = require('../middleware/authMiddleware');
 
-router.get('/:id', DificuldadeController.buscarPorId);
+const { verificarAdmin } = require('../middleware/adminMiddleware');
 
-router.post('/', DificuldadeController.criar);
+router.get('/', verificarToken, DificuldadeController.listarTodos);
 
-router.put('/:id', DificuldadeController.atualizar);
+router.get('/:id', verificarToken, DificuldadeController.buscarPorId);
 
-router.delete('/:id', DificuldadeController.deletar);
+router.post('/', verificarToken, verificarAdmin, DificuldadeController.criar);
+
+router.put('/:id', verificarToken, verificarAdmin, DificuldadeController.atualizar);
+
+router.delete('/:id', verificarToken, verificarAdmin, DificuldadeController.deletar);
 
 module.exports = router;

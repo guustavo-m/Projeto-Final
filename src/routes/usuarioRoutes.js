@@ -3,14 +3,18 @@ const router = express.Router();
 
 const UsuarioController = require('../controllers/usuarioController');
 
-router.get('/', UsuarioController.listarTodos);
+const { verificarToken } = require('../middleware/authMiddleware');
 
-router.get('/:id', UsuarioController.buscarPorId);
+const { verificarAdmin } = require('../middleware/adminMiddleware');
 
-router.post('/', UsuarioController.criar);
+router.get('/', verificarToken, UsuarioController.listarTodos);
 
-router.put('/:id', UsuarioController.atualizar);
+router.get('/:id', verificarToken, UsuarioController.buscarPorId);
 
-router.delete('/:id', UsuarioController.deletar);
+router.post('/', verificarToken, verificarAdmin, UsuarioController.criar);
+
+router.put('/:id', verificarToken, verificarAdmin, UsuarioController.atualizar);
+
+router.delete('/:id', verificarToken, verificarAdmin, UsuarioController.deletar);
 
 module.exports = router;

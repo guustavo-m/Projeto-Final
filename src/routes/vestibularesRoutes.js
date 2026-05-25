@@ -3,14 +3,18 @@ const router = express.Router();
 
 const VestibularesController = require('../controllers/vestibularesController');
 
-router.get('/', VestibularesController.listarTodos);
+const { verificarToken } = require('../middleware/authMiddleware');
 
-router.get('/:id', VestibularesController.buscarPorId);
+const { verificarAdmin } = require('../middleware/adminMiddleware');
 
-router.post('/', VestibularesController.criar);
+router.get('/', verificarToken, VestibularesController.listarTodos);
 
-router.put('/:id', VestibularesController.atualizar);
+router.get('/:id', verificarToken, VestibularesController.buscarPorId);
 
-router.delete('/:id', VestibularesController.deletar);
+router.post('/', verificarToken, verificarAdmin, VestibularesController.criar);
+
+router.put('/:id', verificarToken, verificarAdmin, VestibularesController.atualizar);
+
+router.delete('/:id', verificarToken, verificarAdmin, VestibularesController.deletar);
 
 module.exports = router;

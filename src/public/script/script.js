@@ -2,6 +2,12 @@
 // VARIÁVEIS GLOBAIS
 // ========================================
 
+const token = localStorage.getItem('jwtToken');
+
+if (!token) {
+    window.location.href = '/';
+}
+
 let produtoEmEdicao = null;
 
 function getAuthHeaders() {
@@ -178,6 +184,43 @@ async function deletarProduto(id) {
         console.error('Erro:', erro);
         mostrarMensagem('Erro: ' + erro.message, 'erro');
     }
+}
+
+async function verificarAutenticacao() {
+
+    const token = localStorage.getItem('jwtToken');
+
+    if (!token) {
+        window.location.href = '/';
+        return;
+    }
+
+    try {
+
+        const resposta = await fetch('/materia', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (resposta.status === 401) {
+            localStorage.removeItem('jwtToken');
+            window.location.href = '/';
+        }
+
+    } catch (erro) {
+        console.error(erro);
+    }
+}
+
+verificarAutenticacao();
+
+const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+if (usuario.tipo !== 'admin') {
+
+    document.querySelector('.form-section').style.display = 'none';
+
 }
 
 // ========================================

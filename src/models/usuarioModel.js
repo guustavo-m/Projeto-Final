@@ -18,35 +18,35 @@ async function buscarPorId(id) {
 }
 
 async function criar(dados) {
-  const { nome, email, senha } = dados;
+  const { nome, email, senha, tipo } = dados;
 
   const sql = `
-    INSERT INTO usuario (nome, email, senha)
-    VALUES ($1, $2, $3)
+    INSERT INTO usuario (nome, email, senha, tipo)
+    VALUES ($1, $2, $3, $4)
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [nome, email, senha]
+    [nome, email, senha, tipo || "usuario"]
   );
   
   return result.rows[0];
 }
 
 async function atualizar(id, dados) {
-  const { nome, email, senha } = dados;
+  const { nome, email, senha, tipo } = dados;
   
   const sql = `
     UPDATE usuario
-    SET nome = $1, email = $2, senha = $3
-    WHERE id_user = $4
+    SET nome = $1, email = $2, senha = $3, tipo = $4
+    WHERE id_user = $5
     RETURNING *
   `;
   
   const result = await pool.query(
     sql,
-    [nome, email, senha, id]
+    [nome, email, senha, tipo, id]
   );
   
   return result.rows[0] || null;

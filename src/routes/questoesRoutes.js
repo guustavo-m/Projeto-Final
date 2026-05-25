@@ -3,20 +3,24 @@ const router = express.Router();
 
 const QuestoesController = require('../controllers/questoesController');
 
-router.get('/', QuestoesController.listarTodos);
+const { verificarToken } = require('../middleware/authMiddleware');
 
-router.get('/:id', QuestoesController.buscarPorId);
+const { verificarAdmin } = require('../middleware/adminMiddleware');
 
-router.get('/vestibular/:vestibular', QuestoesController.listarPorVestibular);
+router.get('/', verificarToken, QuestoesController.listarTodos);
 
-router.get('/materia/:materia', QuestoesController.listarPorMateria);
+router.get('/vestibular/:vestibular', verificarToken, QuestoesController.listarPorVestibular);
 
-router.get('/topico/:topico', QuestoesController.listarPorTopico);
+router.get('/materia/:materia', verificarToken, QuestoesController.listarPorMateria);
 
-router.post('/', QuestoesController.criar);
+router.get('/topico/:topico', verificarToken, QuestoesController.listarPorTopico);
 
-router.put('/:id', QuestoesController.atualizar);
+router.get('/:id', verificarToken, QuestoesController.buscarPorId);
 
-router.delete('/:id', QuestoesController.deletar);
+router.post('/', verificarToken, verificarAdmin, QuestoesController.criar);
+
+router.put('/:id', verificarToken, verificarAdmin, QuestoesController.atualizar);
+
+router.delete('/:id', verificarToken, verificarAdmin, QuestoesController.deletar);
 
 module.exports = router;

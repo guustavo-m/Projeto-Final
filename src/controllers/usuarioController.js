@@ -49,13 +49,14 @@ async function criar(req, res) {
       });
     }
     
-    const novausuario = await UsuarioModel.criar({ 
+    const novoUsuario = await UsuarioModel.criar({ 
       nome,
       email,
       senha
     });
     
-    res.status(201).json(novausuario);
+    res.status(201).json(novoUsuario);
+
   } catch (erro) {
     res.status(500).json({ 
       mensagem: 'Erro ao criar usuário',
